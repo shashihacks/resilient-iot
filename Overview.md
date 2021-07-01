@@ -118,7 +118,7 @@ Python script to check what happened to connection.
 
 
 
-__Task Overview:__
+__Task Overview: (Aurika)__
 __Decide the control logic of irrigation (how much to put water), depending on local sensor data.__
 - We have three input variables, such as a temperature sensor, a soil moisture sensor, and a rain sensor. 
 - All three variables have their measurements of values. At this step, after obtaining all input values we must convert them into the actual soil moisture value. 
