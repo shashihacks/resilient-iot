@@ -117,3 +117,15 @@ Python script to check what happened to connection.
 - `on_message()` for callback when PUBLISH message from broker
 
 
+
+__Task Overview:__
+__Decide the control logic of irrigation (how much to put water), depending on local sensor data.__
+- We have three input variables, such as a temperature sensor, a soil moisture sensor, and a rain sensor. 
+- All three variables have their measurements of values. At this step, after obtaining all input values we must convert them into the actual soil moisture value. 
+- The other block which we should consider calculating a value position is the desired soil moisture. It should calculate desired soil moisture that is different for any kind of plant, type of growth, and kind of soil. 
+- Two measurements (The actual soul moisture based on sensors and desired soil moisture) should be compared and extract one measurement in the range between 0 and 100. 
+- The soil evaporation model (the actual soil moisture) considers the evaporation of the ground and translates back the amount of water added into the soil moisture in the ground.
+- Based on references and , the input values are defined in the range between – 100 and 100. For taking the decision when we should put water based on fuzzy logic, the authors implement the control system as if the desired moisture value is larger or equal than the actual moisture value, a valve should be closed. If the desired moisture value is less than the actual moisture value, then we should open a valve for irrigating.  
+
+
+
