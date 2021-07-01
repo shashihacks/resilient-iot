@@ -60,11 +60,12 @@ __Microcontroller:__
 
 1. Get data from the `openweathermap` api and filter the corresponding keys necessary.
 2. Create objects that combine the sensor data and api data
-3. Periodically post the sensor data to cloud(firebase).  
-4. Write a cronjob to indicate the liveness of edge node.
-5. Initialize the required data needed for edge node when replaced with new. 
-6. Provide necessary data for the control logic 
-7. Code the part of control logic implementation
+3. Setup the cloud database(`firebase`) and design the document structure.
+4. Periodically post the sensor data to cloud(firebase).  
+5. Write a `cronjob` to indicate the liveness of edge node.
+6. Initialize the required data needed for edge node when replaced with new. 
+7. Provide necessary data for the control logic. 
+8. Code the part of control logic implementation.
 
 
 
@@ -105,4 +106,14 @@ __Setup WiFi connection on ESP32 and enable MQTT Publish__
 - Use PubSubClient lib for enabling `MQTT` publishing and use WiFILibrary for enabling WiFi.
 - Use `connect_MQTT()` to connect to the broker
 - Publish data over `MQTT` 
+
+
+__Setup subscriber to recieve data from broker__
+
+- Install python mqtt language bindings (`paho-mqtt`)
+Python script to check what happened to connection.
+
+- `on_connect()` - callback for client recieving a CONNACK from broker
+- `on_message()` for callback when PUBLISH message from broker
+
 
