@@ -1,5 +1,7 @@
+from os import write
 import urllib
 import json
+import pprint
 import urllib.request
 api = "http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=0b7c4978dda884bbfb0397d03033509f"
 sapi = "http://api.openweathermap.org/data/2.5/forecast/daily?zip=94032&appid=0b7c4978dda884bbfb0397d03033509f" 
@@ -12,10 +14,10 @@ saapi = "http://api.openweathermap.org/data/2.5/weather?q=Passau&appid=0b7c4978d
 lastRecorded = 60
 sensor_state = {
       
-    "Analog_Rain": 4095,
+    "Analog_Rain": 1,
     "Digital_Rain": 1,
-    "Temp": 20,
-    "Soil_Moisture": 250,
+    "Temp": 1,
+    "Soil_Moisture": 1,
 
 }
 
@@ -34,48 +36,60 @@ print(currentSensorvalues)
 
 
 # Api
-
 # 1. Temperature    "temp":286.89, (convert)
 # "humidity":95 (moisture - fault tolerance - determine moisture) 
 
-
 #  Control logic
 # irrigate at 18:00
-
 # 1. Mositure should be around <700
 # 2. Digital rain - 1 & analog> 3500 
 
 def getCurrentWeatherConditions():
     response = urllib.request.urlopen(saapi)
     output = response.read().decode('utf-8')
-    return  output
+    return  json.loads(output)
 
 def irrigate(time):
+    print(sensor_state)
     print("Irrgating for "+ str(time) + " minutes")
+
 def doNotIrrigate(time):
+    print(sensor_state)
     print("Not irrigating now")
+
 def getEstimatedMoisture():
     #  decreases in time , check the last recorded value
     return 400
 
 def controlLogic():
-    print("logic", currentSensorvalues)
+    # print("logic", currentSensorvalues)
+
     # Fix missing sensor data with api
-    cloud_data = getCurrentWeatherConditions() 
-    if not currentSensorvalues['Soil_Moisture']:
+    cloud_data = getCurrentWeatherConditions()
+  
+
+    if(currentSensorvalues['Soil_Moisture'] == 9999):
         currentSensorvalues['Soil_Moisture'] = getEstimatedMoisture()
-        
-    if not  any(currentSensorvalues['Digital_Rain'],currentSensorvalues['Analog_Rain']):
+        sensor_state['Soil_Moisture'] = 0
+
+ 
+    if ( currentSensorvalues['Digital_Rain'] == 9999 or  currentSensorvalues['Analog_Rain'] == 9999):
+         sensor_state['Digital_Rain'] = 0
+         sensor_state['Analog_Rain'] = 0
+    
+
          if(cloud_data['weather'][0]['main']=='Rain'):
-             currentSensorvalues['Digital_Rain'] = 0
+             currentSensorvalues['Digital_Rain'] = 1
              currentSensorvalues['Analog_Rain'] = 2500
+             
+
          else:
-            currentSensorvalues['Digital_Rain'] = 1
+            currentSensorvalues['Digital_Rain'] = 0
             currentSensorvalues['Analog_Rain'] = 4000
 
 
 
-    if(currentSensorvalues['Soil_Moisture'] <700 and currentSensorvalues['Digital_Rain'] and currentSensorvalues['Analog_Rain']>3500):
+    if(( currentSensorvalues['Soil_Moisture'] <300 and  not currentSensorvalues['Digital_Rain'] ) or currentSensorvalues['Analog_Rain']<3000):
         irrigate(5)
     else:
         doNotIrrigate(5)

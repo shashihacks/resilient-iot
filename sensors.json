@@ -1,13 +1,13 @@
 [{
     "Analog_Rain": 4095,
-    "Digital_Rain": 1,
+    "Digital_Rain": 0,
     "Temp": 22.36364,
     "Soil_Moisture": 250,
     "Soil_Moisture_percent": 174
   },
   {
     "Analog_Rain": 4095,
-    "Digital_Rain": 1,
+    "Digital_Rain": 0,
     "Temp": 22,
     "Soil_Moisture": 240,
     "Soil_Moisture_percent": 174
