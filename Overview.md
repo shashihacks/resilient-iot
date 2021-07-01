@@ -8,6 +8,31 @@ Irrigation system controllers operate on progammed schedules and timer, While th
 
 
 
+
+### Setup 
+Task: Getting data from the sensors and using MQTT protocol over WiFi to transport data from ESP32 [publisher] to Raspberry pi [broker + subscriber]
+
+__Sensors:__
+
+- KY 028 temp sensors
+- Capacitive soil moisture sensor v1.2
+- Mh-rd raindrop sensor
+
+__Microcontroller:__
+
+- Raspberry pi 4
+- Wroom wifi ESP32
+
+__ESP32 and Sensor connections:__
+
+- Wired connection between sensors to EPS32
+- Digital and Analog inputs from the rain sensor
+- Analog inputs from temp and soil moisture sensors
+- Use of Arduino code to receive sensor inputs to the serial monitor
+-  ArduinoJson lib to write output to a JSON file.
+
+
+
 ### Description.
 
 - An edge node is setup with moisture, rain and temperature sensors where it periodically collects the data, which in our case, set every 60 seconds.
@@ -46,3 +71,44 @@ Irrigation system controllers operate on progammed schedules and timer, While th
 5. Initialize the required data needed for edge node when replaced with new. 
 6. Provide necessary data for the control logic 
 7. Code the part of control logic implementation
+
+
+
+
+### Task overview (Pranav)
+
+
+__ESP32 and Sensor connections:__
+
+- Wired connection between sensors to EPS32
+- Digital and Analog inputs from the rain sensor
+- Analog inputs from temp and soil moisture sensors
+- Use of Arduino code to receive sensor inputs to the serial monitor
+- Use of ArduinoJson lib to write output to a JSON file.
+
+
+
+__USING MQTT TO ESTABLISH CONNECTION BTW ESP32 AND RASP-Pi__
+
+__Setup folder structure used:__
+
+- fieldname/cropname/temp
+- fieldname/cropname/rain_analog
+- fieldname/cropname/rain_digital
+- fieldname/cropname/soil_moisture
+
+__Setting MQTT broker to receive data:__
+
+1. Install mosquito and required libs
+2. Modify the default Mosquitto config at /etc/mosquitto/conf.d 
+3. Removed anonymous logins
+4. Save passwords in separate files
+5. Use port 1883
+6. Set up a new username & password
+
+__Setup WiFi connection on ESP32 and enable MQTT Publish__
+
+- Use PubSubClient lib for enabling MQTT publishing and use WiFILibrary for enabling WiFi.
+- Use connect_MQTT() to connect to the broker
+- Publish data over MQTT 
+
