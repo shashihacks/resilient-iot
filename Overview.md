@@ -23,13 +23,7 @@ __Microcontroller:__
 - Raspberry pi 4
 - Wroom wifi ESP32
 
-__ESP32 and Sensor connections:__
 
-- Wired connection between sensors to EPS32
-- Digital and Analog inputs from the rain sensor
-- Analog inputs from temp and soil moisture sensors
-- Use of Arduino code to receive sensor inputs to the serial monitor
--  ArduinoJson lib to write output to a JSON file.
 
 
 
@@ -80,11 +74,11 @@ __ESP32 and Sensor connections:__
 
 __ESP32 and Sensor connections:__
 
-- Wired connection between sensors to EPS32
+- Wired connection between sensors to `EPS32`
 - Digital and Analog inputs from the rain sensor
 - Analog inputs from temp and soil moisture sensors
 - Use of Arduino code to receive sensor inputs to the serial monitor
-- Use of ArduinoJson lib to write output to a JSON file.
+- Use of `ArduinoJson` lib to write output to a JSON file.
 
 
 
@@ -108,7 +102,7 @@ __Setting MQTT broker to receive data:__
 
 __Setup WiFi connection on ESP32 and enable MQTT Publish__
 
-- Use PubSubClient lib for enabling MQTT publishing and use WiFILibrary for enabling WiFi.
-- Use connect_MQTT() to connect to the broker
-- Publish data over MQTT 
+- Use PubSubClient lib for enabling `MQTT` publishing and use WiFILibrary for enabling WiFi.
+- Use `connect_MQTT()` to connect to the broker
+- Publish data over `MQTT` 
 
