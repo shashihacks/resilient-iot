@@ -1,6 +1,6 @@
 [{
-    "Analog_Rain": 4095,
-    "Digital_Rain": 0,
+    "Analog_Rain": 9999,
+    "Digital_Rain": 9999,
     "Temp": 22.36364,
     "Soil_Moisture": 250,
     "Soil_Moisture_percent": 174

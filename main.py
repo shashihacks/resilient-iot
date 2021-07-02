@@ -44,6 +44,10 @@ print(currentSensorvalues)
 # 1. Mositure should be around <700
 # 2. Digital rain - 1 & analog> 3500 
 
+def showWarnings():
+    print("Sensors have failed and could not fetch data from cloud")
+    exit(1)
+
 def getCurrentWeatherConditions():
     response = urllib.request.urlopen(saapi)
     output = response.read().decode('utf-8')
@@ -65,9 +69,11 @@ def controlLogic():
     # print("logic", currentSensorvalues)
 
     # Fix missing sensor data with api
-    cloud_data = getCurrentWeatherConditions()
-  
-
+    try:
+        cloud_data = getCurrentWeatherConditions()
+    except:
+        cloud_data = "Unable to fetch"
+    # pprint.pprint(cloud_data)
     if(currentSensorvalues['Soil_Moisture'] == 9999):
         currentSensorvalues['Soil_Moisture'] = getEstimatedMoisture()
         sensor_state['Soil_Moisture'] = 0
@@ -76,10 +82,15 @@ def controlLogic():
     if ( currentSensorvalues['Digital_Rain'] == 9999 or  currentSensorvalues['Analog_Rain'] == 9999):
          sensor_state['Digital_Rain'] = 0
          sensor_state['Analog_Rain'] = 0
-    
+         if(cloud_data == 'Unable to fetch'):
+             return showWarnings()
+             
+        #  print("cloud data rain", cloud_data['weather'][0]['main']) 
+            
 
-         if(cloud_data['weather'][0]['main']=='Rain'):
+         if(cloud_data['weather'][0]['main']=='Rain' or cloud_data['weather'][0]['main']=='Light rain'):
              currentSensorvalues['Digital_Rain'] = 1
+             print(currentSensorvalues)
              currentSensorvalues['Analog_Rain'] = 2500
              
 
@@ -89,7 +100,7 @@ def controlLogic():
 
 
 
-    if(( currentSensorvalues['Soil_Moisture'] <300 and  not currentSensorvalues['Digital_Rain'] ) or currentSensorvalues['Analog_Rain']<3000):
+    if( currentSensorvalues['Soil_Moisture'] <300 and  (currentSensorvalues['Analog_Rain']>3000 and currentSensorvalues['Analog_Rain']<4500)):
         irrigate(5)
     else:
         doNotIrrigate(5)
