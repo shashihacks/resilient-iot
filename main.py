@@ -21,6 +21,8 @@ sensor_state = {
 
 }
 
+irrgatedToday = False
+
 # Reading Sensor data 
 with open("sensors.json") as jsonFile:
     jsonObject = json.load(jsonFile)
@@ -56,6 +58,8 @@ def getCurrentWeatherConditions():
 def irrigate(time):
     print(sensor_state)
     print("Irrgating for "+ str(time) + " minutes")
+    irrgatedToday = True
+    
 
 def doNotIrrigate(time):
     print(sensor_state)
