@@ -1,0 +1,8 @@
+estimatedmositiure() function
+
+scheduled task to send sensor data and ping another node 
+
+sensors data shoukld(not in range  = 9999)
+save irrgation status in cloud and local
+
+
