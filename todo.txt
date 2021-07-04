@@ -1,8 +1,14 @@
 estimatedmositiure() function
-
 scheduled task to send sensor data and ping another node 
+save irrgation status in cloud and local
+
+
 
 sensors data shoukld(not in range  = 9999)
-save irrgation status in cloud and local
+
+
+Aurika
+
+Testcase and results
 
 

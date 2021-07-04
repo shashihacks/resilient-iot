@@ -24,7 +24,7 @@ __Microcontroller:__
 - Wroom wifi ESP32
 
 
-
+![name of the picture](../images/picture.png)
 
 
 ### Description.

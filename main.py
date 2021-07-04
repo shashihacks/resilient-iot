@@ -29,6 +29,7 @@ with open("sensors.json") as jsonFile:
     jsonFile.close()
 
 currentSensorvalues = jsonObject[0]
+
 print(currentSensorvalues)
 # Variables required 
 #1   "Soil_Moisture": 256, [0-300]= No - low moisture  [300-700] Medium  [700] High
