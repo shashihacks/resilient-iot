@@ -1,9 +1,15 @@
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+import json
+import time
+import os
 
+
+
+ip_address = "192.168.1.2"
 firebaseConfig = {
-      'apiKey': "AIzaSyBqfc4B-gg7wBvqC1QBQMeq1giC1HpcYwc",
+  'apiKey': "AIzaSyBqfc4B-gg7wBvqC1QBQMeq1giC1HpcYwc",
   'authDomain': "resilient-c8d95.firebaseapp.com",
   'projectId': "resilient-c8d95",
   'storageBucket': "resilient-c8d95.appspot.com",
@@ -17,19 +23,18 @@ firebaseConfig = {
 cred = credentials.Certificate("./creds.json")
 firebase_admin.initialize_app(cred)
 
-
 db = firestore.client()
-doc_ref = db.collection(u'users').document(u'alovelace')
-doc_ref.set({
-    u'first': u'Ada',
-    u'last': u'Lovelace',
-    u'born': 1815
-})
+with open("sensors.json") as jsonFile:
+    jsonObject = json.load(jsonFile)
+    jsonFile.close()
+data = jsonObject[-1]
 
-doc_ref = db.collection(u'users').document(u'aturing')
-doc_ref.set({
-    u'first': u'raspberry',
-    u'middle': u'Mathison',
-    u'last': u'test',
-    u'born': 1912
-})
+print(data)
+timestamp = int(time.time()*1000.0)
+try:
+    db.collection(u'sensors').document(f"{timestamp}").set(data)
+except:
+    print("unable to connect or send data")
+
+
+os.system("ping -c 1 " + ip_address)

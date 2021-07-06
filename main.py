@@ -3,6 +3,8 @@ import urllib
 import json
 import pprint
 import urllib.request
+from datetime import date
+
 api = "http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=0b7c4978dda884bbfb0397d03033509f"
 sapi = "http://api.openweathermap.org/data/2.5/forecast/daily?zip=94032&appid=0b7c4978dda884bbfb0397d03033509f" 
 
@@ -21,7 +23,16 @@ sensor_state = {
 
 }
 
-irrgatedToday = False
+def getDate():
+    today = date.today()
+    d1 = today.strftime("%d/%m/%Y")
+    return d1
+
+irrigation_state = {
+    "irrgatedToday" : False,
+    "date": getDate()
+}
+
 
 # Reading Sensor data 
 with open("sensors.json") as jsonFile:
@@ -47,6 +58,10 @@ print(currentSensorvalues)
 # 1. Mositure should be around <700
 # 2. Digital rain - 1 & analog> 3500 
 
+def saveState():
+    print("saving state to a file")
+
+
 def showWarnings():
     print("Sensors have failed and could not fetch data from cloud")
     exit(1)
@@ -60,14 +75,17 @@ def irrigate(time):
     print(sensor_state)
     print("Irrgating for "+ str(time) + " minutes")
     irrgatedToday = True
+    saveState()
     
 
 def doNotIrrigate(time):
     print(sensor_state)
     print("Not irrigating now")
 
+
 def getEstimatedMoisture():
     #  decreases in time , check the last recorded value
+    lastMoistureValue = currentSensorvalues['Soil_Moisture']
     return 400
 
 def controlLogic():

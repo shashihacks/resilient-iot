@@ -1560,8 +1560,8 @@
     "Soil_Moisture_percent": 174
   },
   {
-    "Analog_Rain": 4095,
-    "Digital_Rain": 1,
+    "Analog_Rain": 1234,
+    "Digital_Rain": 555,
     "Temp": 20.90909,
     "Soil_Moisture": 240,
     "Soil_Moisture_percent": 174

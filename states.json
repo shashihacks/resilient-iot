@@ -1,0 +1,12 @@
+
+
+{
+      
+    "Analog_Rain": 1,
+    "Digital_Rain": 1,
+    "Temp": 1,
+    "Soil_Moisture": 1,
+    "irrigated_today": false,
+    "estimatedMoisture": 700
+
+}
