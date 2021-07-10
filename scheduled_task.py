@@ -29,10 +29,18 @@ with open("sensors.json") as jsonFile:
     jsonFile.close()
 data = jsonObject[-1]
 
+
+# send sensors state to cloud
+with open("sensors_state.json") as stateFile:
+    jsonObject = json.load(stateFile)
+    stateFile.close()
+state_data = jsonObject
+
 print(data)
 timestamp = int(time.time()*1000.0)
 try:
     db.collection(u'sensors').document(f"{timestamp}").set(data)
+    db.collection(u'state').document(f"{timestamp}").set(state_data)
 except:
     print("unable to connect or send data")
 

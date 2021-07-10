@@ -1,6 +1,6 @@
-estimatedmositiure() function
-scheduled task to send sensor data and ping another node 
-save irrgation status in cloud and local
+estimatedmositiure() function 
+scheduled task to send sensor data and ping another node - done  
+save irrgation status in cloud and local  - done
 
 
 

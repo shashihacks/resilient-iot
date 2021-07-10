@@ -60,6 +60,10 @@ print(currentSensorvalues)
 
 def saveState():
     print("saving state to a file")
+    with open("sensors_state.json", "w") as f:
+        print("writing")
+        json.dump(sensor_state, f)
+    f.close()
 
 
 def showWarnings():
@@ -81,12 +85,13 @@ def irrigate(time):
 def doNotIrrigate(time):
     print(sensor_state)
     print("Not irrigating now")
+    saveState()
 
 
-def getEstimatedMoisture():
-    #  decreases in time , check the last recorded value
-    lastMoistureValue = currentSensorvalues['Soil_Moisture']
-    return 400
+# def getEstimatedMoisture():
+#     #  decreases in time , check the last recorded value
+#     lastMoistureValue = currentSensorvalues['Soil_Moisture']
+#     return 400
 
 def controlLogic():
     # print("logic", currentSensorvalues)
@@ -98,7 +103,7 @@ def controlLogic():
         cloud_data = "Unable to fetch"
     # pprint.pprint(cloud_data)
     if(currentSensorvalues['Soil_Moisture'] == 9999):
-        currentSensorvalues['Soil_Moisture'] = getEstimatedMoisture()
+        # currentSensorvalues['Soil_Moisture'] = getEstimatedMoisture()
         sensor_state['Soil_Moisture'] = 0
 
  
