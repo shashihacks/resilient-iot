@@ -44,18 +44,20 @@ if(currentSensorvalues['Soil_Moisture'] <= 1200):
     lastMoistureValue['time'] = lastRecordedTime
 
 
+print("Current sensor values")
 print(currentSensorvalues)
+print("\n")
 
 
 def saveState():
-    print("saving state to a file")
-    with open("sensors_state.json", "w") as f:
-        print("writing")
+    
+    with open("sensors_state.json", "w") as f:    
         json.dump(sensor_state, f)
     f.close()
 
 
 def showWarnings():
+    print("\n")
     print("Sensors have failed and could not fetch data from cloud")
     exit(1)
 
@@ -65,15 +67,21 @@ def getCurrentWeatherConditions():
     return  json.loads(output)
 
 def irrigate(time):
+    print("Current Sensor state")
     print(sensor_state)
+    print("\n\n")
+    print("------------Determined irrigation--------------")
     print("Irrgating for "+ str(time) + " minutes")
     irrgatedToday = True
     saveState()
     
 
 def doNotIrrigate(time):
+    print("Current Sensor state")
     print(sensor_state)
-    print("Not irrigating now")
+    print("\n\n")
+    print("------------Determined irrigation--------------")
+    print("No need to irrigate now")
     saveState()
 
 
