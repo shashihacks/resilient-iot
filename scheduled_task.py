@@ -38,6 +38,7 @@ state_data = jsonObject
 
 print(data)
 timestamp = int(time.time()*1000.0)
+print(timestamp)
 try:
     db.collection(u'sensors').document(f"{timestamp}").set(data)
     db.collection(u'state').document(f"{timestamp}").set(state_data)
@@ -46,3 +47,5 @@ except:
 
 
 os.system("ping -c 1 " + ip_address)
+timestamp = int(time.time()*1000.0)
+print(timestamp)

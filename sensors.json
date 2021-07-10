@@ -2,7 +2,7 @@
     "Analog_Rain": 2500,
     "Digital_Rain": 1,
     "Temp": 22.36364,
-    "Soil_Moisture": 250,
+    "Soil_Moisture": 9999,
     "Soil_Moisture_percent": 174
   },
   {
