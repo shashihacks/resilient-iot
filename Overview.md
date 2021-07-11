@@ -24,7 +24,7 @@ __Microcontroller:__
 - Wroom wifi ESP32
 
 
-![name of the picture](../images/picture.png)
+
 
 
 ### Description.
@@ -82,15 +82,15 @@ __Determining condition to irrigate__
 2. This is run as scheduled task and checked for every hour
 
 
-__Fault Tolerance__ (Dealing with sensor failures)
+__Fault Tolerance and Replication__ (Dealing with sensor failures)
 
 1. If the Analog or rain sensor value is fault, the corresponding values are replaved with cloud api, depending on the received conditions for the day.
 
 
-__Replication__
-1. Senors data is alwyas writting to `json` file and stored on the edge device
-2. Sensors state at any point is saved in a file, depending upon the obatained values, a value of `1` is written if it is working and `0` if data is faulty.
-3. A cron job is setup to run every 30 minutes to save the current sensors state and values into the cloud store along with its timestamp.
+
+2. Senors data is alwyas writting to `json` file and stored on the edge device
+3. Sensors state at any point is saved in a file, depending upon the obatained values, a value of `1` is written if it is working and `0` if data is faulty.
+4. A cron job is setup to run every 30 minutes to save the current sensors state and values into the cloud store along with its timestamp.
 
 
 __Detecting Liveness of Edge node__
