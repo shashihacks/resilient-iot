@@ -46,7 +46,64 @@ __Microcontroller:__
 
 
 
-### Control logic
+### Control logic (Shashi)
+
+1. Get the data from the `openwathermap` api and save.
+2. validate the input data for identifying the sensor state
+    - `9999` indicates that  sensors has failed, as the read value is not in the acceptable range and state of the current sensors is shown to the user as warning.
+
+__Senors value and its ranges__
+    1. Analog rain 
+
+|  Range |  Description |
+|---|---|
+|  1-2500 | High Rain  |
+|  2500 - 3000 | Medium Rain  |
+|  3000 - 4000 | Low Rain  |
+|  4000 & above | No Rain  |
+
+ 2. Digital rain 
+
+ |  Range |  Description |
+|---|---|
+|  1 |  Rain  |
+|  0 | No Rain  |
+
+3. Soil Moisture
+
+ |  Range |  Description |
+|---|---|
+|  0-300 |  No - Low Moisture  |
+|  300-700 | Medium Moisture  |
+|700 & above | High Moisture|
+
+__Determining condition to irrigate__
+1. If soil moisture is less than 300 (No moisture) and Ananlog rain sensors value is greater than 3000 (No rain), then irrigates for ceratin amount of time (5 minutes chosen in our case).
+2. This is run as scheduled task and checked for every hour
+
+
+__Fault Tolerance__ (Dealing with sensor failures)
+
+1. If the Analog or rain sensor value is fault, the corresponding values are replaved with cloud api, depending on the received conditions for the day.
+
+
+__Replication__
+1. Senors data is alwyas writting to `json` file and stored on the edge device
+2. Sensors state at any point is saved in a file, depending upon the obatained values, a value of `1` is written if it is working and `0` if data is faulty.
+3. A cron job is setup to run every 30 minutes to save the current sensors state and values into the cloud store along with its timestamp.
+
+
+__Detecting Liveness of Edge node__
+
+1. Cron job that is set up pings the machine in local network every 30 minutes to indicate that it is alive.
+
+
+__Failure of Internet connectivity__
+1. In case of network  and sensor failure, warning message is show to user.
+
+
+
+
 
 
 
@@ -59,14 +116,23 @@ __Microcontroller:__
 
 ### Task Overview (Shashi)
 
-1. Get data from the `openweathermap` api and filter the corresponding keys necessary.
-2. Create objects that combine the sensor data and api data
-3. Setup the cloud database(`firebase`) and design the document structure.
-4. Periodically post the sensor data to cloud(firebase).  
-5. Write a `cronjob` to indicate the liveness of edge node.
+__Openweathermap__
+1. Set up the account with  `openweathermap`  and connect the api.
+2. Get releant data(e.g by specifying city, pincode and country) from the api and filter the corresponding keys necessary.
+3. Create and save objects that combine the sensor data and api data.
+
+__Firestore setup__
+1. Setup the cloud database(`firestore`) and design the document structure to store sensors data.
+2. Periodically post the sensor data to `firestore`.  
+
+__Cronjob__
+5. Written a `cronjob` to indicate the liveness of edge node.
 6. Initialize the required data needed for edge node when replaced with new. 
-7. Provide necessary data for the control logic. 
-8. Code the part of control logic implementation.
+7. Send data to cloudstore periodically
+8. Delete the logs after saving the data to cloud.
+
+__Control logic code__
+1. Code the  control logic implementation that satsisifes irrigation needs.
 
 
 

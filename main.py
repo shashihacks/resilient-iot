@@ -102,6 +102,8 @@ def controlLogic():
         cloud_data = "Unable to fetch"
     # pprint.pprint(cloud_data)
     if(currentSensorvalues['Soil_Moisture'] == 9999):
+        print("WARNING..Soil_Moisture sensor has failed")
+
         # currentSensorvalues['Soil_Moisture'] = getEstimatedMoisture()
         # print("estimated moisture")
         # print(currentSensorvalues['Soil_Moisture'])
@@ -109,12 +111,14 @@ def controlLogic():
 
  
     if ( currentSensorvalues['Digital_Rain'] == 9999 or  currentSensorvalues['Analog_Rain'] == 9999):
+         print("WARNING.. Using data from the cloud. Rain sensor has failed")
          sensor_state['Digital_Rain'] = 0
          sensor_state['Analog_Rain'] = 0
          if(cloud_data == 'Unable to fetch'):
              return showWarnings()            
 
          if(cloud_data['weather'][0]['main']=='Rain' or cloud_data['weather'][0]['main']=='Light rain'):
+            
              currentSensorvalues['Digital_Rain'] = 1
              print(currentSensorvalues)
              currentSensorvalues['Analog_Rain'] = 2500
@@ -125,9 +129,10 @@ def controlLogic():
             currentSensorvalues['Analog_Rain'] = 4000
 
 
-
+   
     if( currentSensorvalues['Soil_Moisture'] <300 and  (currentSensorvalues['Analog_Rain']>3000 and currentSensorvalues['Analog_Rain']<4500)):
         irrigate(5)
+    
     else:
         doNotIrrigate(5)
 
