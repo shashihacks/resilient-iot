@@ -70,7 +70,8 @@ __Our Setup for MQTT:__
 ![our setup (1)](https://user-images.githubusercontent.com/86833585/125269582-203cd300-e309-11eb-8c42-9584ea50a97b.jpg)
 
 
-__MQTT Publisher:__![Screenshot from 2021-07-11 11-14-18](https://user-images.githubusercontent.com/86833585/125239659-3fc40380-e2e9-11eb-825f-50aa8128b26f.png)
+__MQTT Publisher:__
+![Screenshot from 2021-07-11 11-14-18](https://user-images.githubusercontent.com/86833585/125239659-3fc40380-e2e9-11eb-825f-50aa8128b26f.png)
 
 - We enable the ESP32 board  to act as the MQTT Publisher. 
 - It publishes sensor data every 10 mins to the broker. The ‘PubSubClient’ library is used to establish MQTT connections and publish messages to the MQTT broker.
