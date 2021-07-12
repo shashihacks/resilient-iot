@@ -14,7 +14,7 @@ Such systems prove to have quite a few advantages. These systems will not only h
 
 Our project uses a combination of various monitoring sensors, various microcontrollers for logic implementation and use various weather forecast APIs couples with cloud based storage capabilities. Given below is an abstract implemention of the project itself.
 
-![project setup (1)](https://user-images.githubusercontent.com/86833585/125267344-fedae780-e306-11eb-84a3-3f4f49ae9c0a.jpg)
+![project setup](https://user-images.githubusercontent.com/86833585/125267344-fedae780-e306-11eb-84a3-3f4f49ae9c0a.jpg)
 
 
 ### Task Descriptions
