@@ -5,7 +5,7 @@
 ### Introduction
 
 
-This project aims at implementing a resilient irrigation system, that operates on programmed schedules and timers. We make use of IoT devices and components to monitor weather and soil conditions, and adjust the irrigation schedule aptly based on the local conditions. This system is enabled with a control logic that is capable of notifying the user about the irrigation parameters and conditions. Any failure in the component or the failure of the edge node itself is quicky recognised, accounted and adjusted for, as well as notified to the user.
+This project aims at implementing a resilient irrigation system, that operates on programmed schedules. We make use of IoT devices and components to monitor weather and soil conditions, and adjust the irrigation schedule aptly based on the local conditions. This system is enabled with a control logic that is capable of notifying the user about the irrigation parameters and conditions. Any failure in the component or the failure of the edge node itself is quicky recognised, accounted and adjusted for, as well as notified to the user.
 
 Such systems prove to have quite a few advantages. These systems will not only help users save time and financial resources, but also ensure that only the right amount of water is used for irrigation. Irrigating sparsely and only when required saves water, and is highly beneficial to plants, as both over-irrigating and under-irrigating have negative implications on plant growth and yields. The system also help enhance the beauty and health of local landscapes.
 
@@ -175,33 +175,33 @@ __Failure of Internet connectivity__
 
 |Test Case| Case 1 | Case 2| Case 3 | Case 4 | Case 5 |
 |---|---|---|---|---|---|
-|Analog Rain Input| 2000 | 4095 | 3500  | 9999  | 4095 |
+|Analog Rain Input| 2000 | 4095 | 3500  | 9999 (Replaced with cloud api = No Rain) | 4095 |
 |Soil Moisture Input| 100 | 700 | 250 | 150 | 9999 |
-|Output| No Irrigation | No Irrigation | Irrigation | Irrigation | No Irrigation |
+|Output| No Irrigation | No Irrigation | Irrigation | Irrigation | No Irrigation (Sensor failure) |
 
 Given below are the results of the test runs:
 
--Test Case 1
+- Test Case 1
 
 ![test1](https://user-images.githubusercontent.com/86833585/125242893-94697d80-e2ed-11eb-89ce-2e99b81a421d.png)
 
 
--Test Case 2
+- Test Case 2
 
 ![test2](https://user-images.githubusercontent.com/86833585/125242908-98959b00-e2ed-11eb-903b-3a67facf3f2b.png)
 
 
--Test Case 3
+- Test Case 3
 
 ![test3](https://user-images.githubusercontent.com/86833585/125242915-9d5a4f00-e2ed-11eb-848d-58be48091723.png)
 
 
--Test Case 4
+- Test Case 4
 
 ![test4](https://user-images.githubusercontent.com/86833585/125242919-a0553f80-e2ed-11eb-9cfb-fd062e06bc76.png)
 
 
--Test Case 5
+- Test Case 5
 
 ![test5](https://user-images.githubusercontent.com/86833585/125242924-a3503000-e2ed-11eb-8e5a-8b4902bbb36c.png)
 
