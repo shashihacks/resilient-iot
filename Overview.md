@@ -57,7 +57,7 @@ __Structure of MQTT protocol:__
 
 MQTT stands for Message Queuing Telemetry Transport, and the protocol works on a Publish/Subscribe based Machine-to-Machine communication. The system consists of a ‘publisher’ that publishes messages, a ‘subscriber’ that subscribes to these messages and a ‘broker’ that acts as an intermediary between these two.
 
-![MQTT Basic (3)](https://user-images.githubusercontent.com/86833585/125269537-161ad480-e309-11eb-921e-c06e17721698.jpg)
+![MQTT Basic Structure](https://user-images.githubusercontent.com/86833585/125269537-161ad480-e309-11eb-921e-c06e17721698.jpg)
 
 Some features of MQTT that are of interest to us are as follows: 
 - MQTT protocol is bi-direction in nature, thus allowing all subsystems to interact with each other.
@@ -67,7 +67,7 @@ Some features of MQTT that are of interest to us are as follows:
 
 __Our Setup for MQTT:__
 
-![our setup (1)](https://user-images.githubusercontent.com/86833585/125269582-203cd300-e309-11eb-8c42-9584ea50a97b.jpg)
+![Our MQTT Structure)](https://user-images.githubusercontent.com/86833585/125269582-203cd300-e309-11eb-8c42-9584ea50a97b.jpg)
 
 
 __MQTT Publisher:__![Screenshot from 2021-07-11 11-14-18](https://user-images.githubusercontent.com/86833585/125239659-3fc40380-e2e9-11eb-825f-50aa8128b26f.png)
