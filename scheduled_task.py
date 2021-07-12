@@ -49,3 +49,7 @@ except:
 os.system("ping -c 1 " + ip_address)
 timestamp = int(time.time()*1000.0)
 print(timestamp)
+
+# Delete the files
+# os.remove("sensors.json")
+# os.remove("sensors_state.json")
