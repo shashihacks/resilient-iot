@@ -4,23 +4,23 @@
 
 ### Introduction
 
-Irrigation system controllers operate on programmed schedules and timer, While this project aims to use IoT devices and components to monitor weather, soil conditions,  and water usage to automatically adjust the watering schedule depending on the local conditions. In this project we aim to provide smart irrigation by setting up the monitoring system that is capable of notifying the user for irrigation by displaying the right conditions that are determined through a control logic unit. The edge is setup in such a way, thjat the  user is notified in case of any component failure or failure of edge node itself. 
+Irrigation system controllers operate on programmed schedules and timer. While this project aims to use IoT devices and components to monitor weather, soil conditions,  and water usage to automatically adjust the watering schedule depending on the local conditions. In this project we aim to provide smart irrigation by setting up the monitoring system that is capable of notifying the user for irrigation by displaying the right conditions that are determined through a control logic unit. The edge is setup in such a way, that the user is notified in case of any component failure or failure of edge node itself. 
 
 
 
+### Project Description
 
-### Setup 
 
-__Task 1:__ Sensor setup and getting data from the sensors. and using MQTT protocol over WiFi to transport data from ESP32 [publisher] to Raspberry pi [broker + subscriber]
+### Task Descriptions
+
+#### Task 1: Sensor setup and getting data from the sensors. (Pranav)
 
 Sensors:
-
 - KY 028 temp sensors
 - Capacitive soil moisture sensor v1.2
 - Mh-rd raindrop sensor
 
 Microcontrollers:
-
 - Raspberry pi 4
 - Wroom wifi ESP32
 
@@ -33,36 +33,85 @@ Task Description:
 - As such, an ESP32 WiFi enabled dev board was used instead to connect to the sensors and gather data.
 - While the code collects data, it also checks if the sensor values are in the correct range, and verifies that the sensors work. If not, the code sends a predefined input that notifies the control logic of failing sensors or incorrect data.
 
+The layout of the sensor connections with the ESP32 board is given below:
+
+[insert diagram]
+
+The figure below shows the sensor values, their input type and input value range with it's indication.
+
+|Sensor|Input Type|Input Range and Indication|
+|---|---|---|
+|Rain Sensor|Digital|{0 = No rain} & { 1 = Rain}|
+|Rain Sensor|Analog|Ranging from { 4095 = No rain } to {0 = Heavy rain }|
+|Soil Moisture Sensor|Analog|Ranging from { 0 - 300 : Low moisture} { 300 - 700 : Medium Moisture} {700 - 1200 : High Moisture}
+|Temperature Sensor|Analog|Value in Celcius|
 
 
+#### Task 2: Using MQTT protocol over WiFi to transport data from ESP32 [publisher] to Raspberry pi [broker + subscriber] (Pranav)
 
-### Description.
+The ESP32 board has WiFi capabilities, and as such, the easiest way to send data over WiFi was via the MQTT protocol
 
-- An edge node is setup with moisture, rain and temperature sensors where it periodically collects the data, which in our case, set every 60 seconds.
-- These sensors are calibrated to give the closest values.
-- In case of failure of any component, or missing value from the sensor(which is either delayed or misread),  is replaced with the data obtained from `opeanweathermap` api.
-- The api respond contains forecast data for the day for the current location and is fetched periodically which is set to run every 120 seconds.
+__Structure of MQTT protocol:__
 
-- The application programs combines these two data sources and send to control logic unit, which determines when to irrgiate and display best time to irrigate.
+MQTT stands for Message Queuing Telemetry Transport, and the protocol works on a Publish/Subscribe based Machine-to-Machine communication. The system consists of a ‘publisher’ that publishes messages, a ‘subscriber’ that subscribes to these messages and a ‘broker’ that acts as an intermediary between these two.
 
+file:///home/deopranav/Downloads/MQTT%20Basic%20(2).jpg![image](https://user-images.githubusercontent.com/86833585/125239161-8cf3a580-e2e8-11eb-8ae1-fdbf6aa0609d.png)
 
-#### Checkpointing and recovery
+Some features of MQTT that are of interest to us are as follows: 
+- MQTT protocol is bi-direction in nature, thus allowing all subsystems to interact with each other.
+- MQTT maintains a stateful session awareness, and thus if our sensor gets disconnected from the system, MQTT will notify us regarding it.
+- MQTT is lightweight in nature, and does not have stringent computing resource requirements. This is again in our favour, as the ESP32 board has limited computing power.
+- Being lightweight in nature, MQTT consumes less energy, making it suitable for use with battery operated nodes.
 
-- The sensor data is written to local file system and also, is sent to the `firebase`. (`replication`)
-- In case of data loss in the local file system, the data can be fetched from the cloud database. (`recovery`)
-- In case of edge node failure,  sensor data is retrieved from the cloud and stored in the new node when initialised to continue from the last step of the old edge node. (`checkpoint`)
+__Our Setup for MQTT:__
 
+file:///home/deopranav/Downloads/our%20setup.jpg![image](https://user-images.githubusercontent.com/86833585/125239266-b4e30900-e2e8-11eb-9725-672aca4f819c.png)
 
+__MQTT Publisher:__![Screenshot from 2021-07-11 11-14-18](https://user-images.githubusercontent.com/86833585/125239659-3fc40380-e2e9-11eb-825f-50aa8128b26f.png)
 
+- We enable the ESP32 board  to act as the MQTT Publisher. 
+- It publishes sensor data every 10 mins to the broker. The ‘PubSubClient’ library is used to establish MQTT connections and publish messages to the MQTT broker.
+- The publisher publishes messages across four topics, intended for the four sensor inputs.The topics that we assign are:
+        /farm/analog_rain
+        /farm/dig_rain
+        /farm/moisture
+        /farm/temperature
+        
+The figure below shows the 'ESP32' sucessfully publishing data to 'MQTT broker'.   
+![Screenshot from 2021-07-11 11-15-35](https://user-images.githubusercontent.com/86833585/125239455-f673b400-e2e8-11eb-958c-56ee3de46ff9.png)
 
-### Control logic (Shashi)
+The figure below shows a failed 'ESP32' connection.
+![Screenshot from 2021-07-11 11-17-34](https://user-images.githubusercontent.com/86833585/125239464-fa9fd180-e2e8-11eb-9bd2-ad4de88fc357.png)
 
-1. Get the data from the `openwathermap` api and save.
-2. validate the input data for identifying the sensor state
+__MQTT Broker:__
+- We use the Raspberry pi as the broker. 
+- For this, the Mosquito software is installed on the Pi, and configured such that no unauthorized device can connect and publish or subscribe to the broker.
+- A username and password is set for the broker to be accessed. 
+- The default port ‘1883’ is used to listen to all communications.
+
+The figure below shows the 'Broker' reporting publisher connection along with 'publisher' identity.
+![Screenshot from 2021-07-11 11-14-18](https://user-images.githubusercontent.com/86833585/125239672-4783a800-e2e9-11eb-9e9d-458f4d1f14ef.png)
+
+The figure below shows the 'Broker' reporting failed publisher connection
+![Screenshot from 2021-07-11 11-14-48](https://user-images.githubusercontent.com/86833585/125239685-4d798900-e2e9-11eb-9949-31b3c5e214d4.png)
+
+__MQTT Client:__
+- The Raspberry pi acts as the ‘client’ device as well, and subscribes to the messages of the topic “farm/#”. The wildcard ‘#’ enables the client to listen on any topic that has a main heading of ‘farm’. 
+- The client runs a python script that reads all the messages on our subscribed topic.
+{insert image of getMQTTdata.py }
+- These values are then saved in a JSON format file, and passed on to the control logic.
+
+#### Task 3: Control logic (Shashi)
+
+1. Set up the account with  `openweathermap`  and connect the api.
+2. Get the data from the `openwathermap` api and save. The relevant data(e.g by specifying city, pincode and country) from the api and filter the corresponding keys necessary is procured.
+3. Create and save objects that combine the sensor data and api data.
+4. validate the input data for identifying the sensor state
     - `9999` indicates that  sensors has failed, as the read value is not in the acceptable range and state of the current sensors is shown to the user as warning.
 
 __Senors value and its ranges__
-    1. Analog rain 
+
+1. Analog rain 
 
 |  Range |  Description |
 |---|---|
@@ -87,16 +136,14 @@ __Senors value and its ranges__
 |700 & above | High Moisture|
 
 __Determining condition to irrigate__
-1. If soil moisture is less than 300 (No moisture) and Ananlog rain sensors value is greater than 3000 (No rain), then irrigates for ceratin amount of time (5 minutes chosen in our case).
+
+1. If soil moisture is less than 300 (No moisture) and Ananlog rain sensors value is greater than 3000 (No rain), then irrigates for certain amount of time (5 minutes chosen in our case).
 2. This is run as scheduled task and checked for every hour
 
 
 __Fault Tolerance and Replication__ (Dealing with sensor failures)
 
-1. If the Analog or rain sensor value is fault, the corresponding values are replaved with cloud api, depending on the received conditions for the day.
-
-
-
+1. If the Analog or rain sensor value is fault, the corresponding values are replaced with the data from cloud api, depending on the received conditions for the day.
 2. Senors data is alwyas writting to `json` file and stored on the edge device
 3. Sensors state at any point is saved in a file, depending upon the obatained values, a value of `1` is written if it is working and `0` if data is faulty.
 4. A cron job is setup to run every 30 minutes to save the current sensors state and values into the cloud store along with its timestamp.
@@ -111,97 +158,56 @@ __Failure of Internet connectivity__
 1. In case of network  and sensor failure, warning message is show to user.
 
 
+#### Task 4: Checkpointing and recovery
+
+- The sensor data is written to local file system and also, is sent to the `firebase`. (`replication`)
+- In case of data loss in the local file system, the data can be fetched from the cloud database. (`recovery`)
+- In case of edge node failure,  sensor data is retrieved from the cloud and stored in the new node when initialised to continue from the last step of the old edge node. (`checkpoint`)
+
+
+
+#### Task 5: Test Runs and Cases (Aurika)
+
+- The code was tested by random input variables to ensure that the logic control was sound and that the system worked as desired.
+- The following input parameters were feeded into the system, shown along with the outcomes.
+
+|Test Case| Case 1 | Case 2| Case 3 | Case 4 | Case 5 |
+|---|---|---|---|---|---|
+|Analog Rain Input| 2000 | 4095 | 3500  | 9999  | 4095 |
+|Soil Moisture Input| 100 | 700 | 250 | 150 | 9999 |
+|Output| No Irrigation | No Irrigation | Irrigation | Irrigation | No Irrigation |
+
+Given below are the results of the test runs:
+
+-Test Case 1
+
+![test1](https://user-images.githubusercontent.com/86833585/125242893-94697d80-e2ed-11eb-89ce-2e99b81a421d.png)
+
+
+-Test Case 2
+
+![test2](https://user-images.githubusercontent.com/86833585/125242908-98959b00-e2ed-11eb-903b-3a67facf3f2b.png)
+
+
+-Test Case 3
+
+![test3](https://user-images.githubusercontent.com/86833585/125242915-9d5a4f00-e2ed-11eb-848d-58be48091723.png)
+
+
+-Test Case 4
+
+![test4](https://user-images.githubusercontent.com/86833585/125242919-a0553f80-e2ed-11eb-9cfb-fd062e06bc76.png)
+
+
+-Test Case 5
+
+![test5](https://user-images.githubusercontent.com/86833585/125242924-a3503000-e2ed-11eb-8e5a-8b4902bbb36c.png)
 
 
 
 
 
-
-
-## Test cases
-
-
-
-
-### Task Overview (Shashi)
-
-__Openweathermap__
-1. Set up the account with  `openweathermap`  and connect the api.
-2. Get releant data(e.g by specifying city, pincode and country) from the api and filter the corresponding keys necessary.
-3. Create and save objects that combine the sensor data and api data.
-
-__Firestore setup__
-1. Setup the cloud database(`firestore`) and design the document structure to store sensors data.
-2. Periodically post the sensor data to `firestore`.  
-
-__Cronjob__
-5. Written a `cronjob` to indicate the liveness of edge node.
-6. Initialize the required data needed for edge node when replaced with new. 
-7. Send data to cloudstore periodically
-8. Delete the logs after saving the data to cloud.
-
-__Control logic code__
-1. Code the  control logic implementation that satsisifes irrigation needs.
-
-
-
-
-### Task overview (Pranav)
-
-
-__ESP32 and Sensor connections:__
-
-- Wired connection between sensors to `EPS32`
-- Digital and Analog inputs from the rain sensor
-- Analog inputs from temp and soil moisture sensors
-- Use of Arduino code to receive sensor inputs to the serial monitor
-- Use of `ArduinoJson` lib to write output to a JSON file.
-
-
-
-__USING MQTT TO ESTABLISH CONNECTION BTW ESP32 AND RASP-Pi__
-
-__Setup folder structure used:__
-
-- fieldname/cropname/temp
-- fieldname/cropname/rain_analog
-- fieldname/cropname/rain_digital
-- fieldname/cropname/soil_moisture
-
-__Setting MQTT broker to receive data:__
-
-1. Install mosquito and required libs
-2. Modify the default Mosquitto config at /etc/mosquitto/conf.d 
-3. Removed anonymous logins
-4. Save passwords in separate files
-5. Use port 1883
-6. Set up a new username & password
-
-__Setup WiFi connection on ESP32 and enable MQTT Publish__
-
-- Use PubSubClient lib for enabling `MQTT` publishing and use WiFILibrary for enabling WiFi.
-- Use `connect_MQTT()` to connect to the broker
-- Publish data over `MQTT` 
-
-
-__Setup subscriber to recieve data from broker__
-
-- Install python mqtt language bindings (`paho-mqtt`)
-Python script to check what happened to connection.
-
-- `on_connect()` - callback for client recieving a CONNACK from broker
-- `on_message()` for callback when PUBLISH message from broker
-
-
-
-__Task Overview: (Aurika)__
-__Decide the control logic of irrigation (how much to put water), depending on local sensor data.__
-- We have three input variables, such as a temperature sensor, a soil moisture sensor, and a rain sensor. 
-- All three variables have their measurements of values. At this step, after obtaining all input values we must convert them into the actual soil moisture value. 
-- The other block which we should consider calculating a value position is the desired soil moisture. It should calculate desired soil moisture that is different for any kind of plant, type of growth, and kind of soil. 
-- Two measurements (The actual soul moisture based on sensors and desired soil moisture) should be compared and extract one measurement in the range between 0 and 100. 
-- The soil evaporation model (the actual soil moisture) considers the evaporation of the ground and translates back the amount of water added into the soil moisture in the ground.
-- Based on references and , the input values are defined in the range between – 100 and 100. For taking the decision when we should put water based on fuzzy logic, the authors implement the control system as if the desired moisture value is larger or equal than the actual moisture value, a valve should be closed. If the desired moisture value is less than the actual moisture value, then we should open a valve for irrigating.  
+ 
 
 
 
