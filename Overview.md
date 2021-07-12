@@ -4,11 +4,17 @@
 
 ### Introduction
 
-Irrigation system controllers operate on programmed schedules and timer. While this project aims to use IoT devices and components to monitor weather, soil conditions,  and water usage to automatically adjust the watering schedule depending on the local conditions. In this project we aim to provide smart irrigation by setting up the monitoring system that is capable of notifying the user for irrigation by displaying the right conditions that are determined through a control logic unit. The edge is setup in such a way, that the user is notified in case of any component failure or failure of edge node itself. 
 
+This project aims at implementing a resilient irrigation system, that operates on programmed schedules and timers. We make use of IoT devices and components to monitor weather and soil conditions, and adjust the irrigation schedule aptly based on the local conditions. This system is enabled with a control logic that is capable of notifying the user about the irrigation parameters and conditions. Any failure in the component or the failure of the edge node itself is quicky recognised, accounted and adjusted for, as well as notified to the user.
+
+Such systems prove to have quite a few advantages. These systems will not only help users save time and financial resources, but also ensure that only the right amount of water is used for irrigation. Irrigating sparsely and only when required saves water, and is highly beneficial to plants, as both over-irrigating and under-irrigating have negative implications on plant growth and yields. The system also help enhance the beauty and health of local landscapes.
 
 
 ### Project Description
+
+Our project uses a combination of various monitoring sensors, various microcontrollers for logic implementation and use various weather forecast APIs couples with cloud based storage capabilities. Given below is an abstract implemention of the project itself.
+
+![project setup](https://user-images.githubusercontent.com/86833585/125266684-5a58a580-e306-11eb-9578-7a17d9cdad02.jpg)
 
 
 ### Task Descriptions
@@ -32,10 +38,6 @@ Task Description:
 - Analog inputs tend to be more sensitive and accurate as opposed to digital inputs, and thus were of more importance.
 - As such, an ESP32 WiFi enabled dev board was used instead to connect to the sensors and gather data.
 - While the code collects data, it also checks if the sensor values are in the correct range, and verifies that the sensors work. If not, the code sends a predefined input that notifies the control logic of failing sensors or incorrect data.
-
-The layout of the sensor connections with the ESP32 board is given below:
-
-[insert diagram]
 
 The figure below shows the sensor values, their input type and input value range with it's indication.
 
