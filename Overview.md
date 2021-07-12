@@ -4,25 +4,34 @@
 
 ### Introduction
 
-Irrigation system controllers operate on progammed schedules and timer, While this project aims to use IoT devices and components to monitor weather, soil conditions,  and water usage to automatically adjust the watering schedule depending on the local conditions. In this project we aim to provide smart irrigation by setting up the monitoring system that is capable of notifying the user for irrigation by displaying the right conditions that are determined through a control logic unit. The edge is setup in such a way, thjat the  user is notified in case of any component failure or failure of edge node itself. 
+Irrigation system controllers operate on programmed schedules and timer, While this project aims to use IoT devices and components to monitor weather, soil conditions,  and water usage to automatically adjust the watering schedule depending on the local conditions. In this project we aim to provide smart irrigation by setting up the monitoring system that is capable of notifying the user for irrigation by displaying the right conditions that are determined through a control logic unit. The edge is setup in such a way, thjat the  user is notified in case of any component failure or failure of edge node itself. 
 
 
 
 
 ### Setup 
-Task: Getting data from the sensors and using MQTT protocol over WiFi to transport data from ESP32 [publisher] to Raspberry pi [broker + subscriber]
 
-__Sensors:__
+__Task 1:__ Sensor setup and getting data from the sensors. and using MQTT protocol over WiFi to transport data from ESP32 [publisher] to Raspberry pi [broker + subscriber]
+
+Sensors:
 
 - KY 028 temp sensors
 - Capacitive soil moisture sensor v1.2
 - Mh-rd raindrop sensor
 
-__Microcontroller:__
+Microcontrollers:
 
 - Raspberry pi 4
 - Wroom wifi ESP32
 
+Task Description:
+
+- The main aim of this task is to gather sensor readings and then transmit them to the raspberry pi, in order to be fed into the control logic. 
+- Two of the three sensors, namely the KY028 temperature sensor and the Capacitive soil moisture sensor are only capable of providing analog inputs while the Mh-Rd raindrop module can provide both a digital and analog input.
+- The raspberry pi is not capable of accepting any analog inputs.
+- Analog inputs tend to be more sensitive and accurate as opposed to digital inputs, and thus were of more importance.
+- As such, an ESP32 WiFi enabled dev board was used instead to connect to the sensors and gather data.
+- While the code collects data, it also checks if the sensor values are in the correct range, and verifies that the sensors work. If not, the code sends a predefined input that notifies the control logic of failing sensors or incorrect data.
 
 
 
