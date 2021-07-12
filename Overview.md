@@ -14,7 +14,7 @@ Such systems prove to have quite a few advantages. These systems will not only h
 
 Our project uses a combination of various monitoring sensors, various microcontrollers for logic implementation and use various weather forecast APIs couples with cloud based storage capabilities. Given below is an abstract implemention of the project itself.
 
-![project setup](https://user-images.githubusercontent.com/86833585/125267344-fedae780-e306-11eb-84a3-3f4f49ae9c0a.jpg)
+![project setup](/Images/project_setup.jpg)
 
 
 ### Task Descriptions
@@ -57,7 +57,7 @@ __Structure of MQTT protocol:__
 
 MQTT stands for Message Queuing Telemetry Transport, and the protocol works on a Publish/Subscribe based Machine-to-Machine communication. The system consists of a ‘publisher’ that publishes messages, a ‘subscriber’ that subscribes to these messages and a ‘broker’ that acts as an intermediary between these two.
 
-![MQTT Basic Structure](https://user-images.githubusercontent.com/86833585/125269537-161ad480-e309-11eb-921e-c06e17721698.jpg)
+![MQTT Basic Structure](/Images/MQTT_Basic.jpg)
 
 Some features of MQTT that are of interest to us are as follows: 
 - MQTT protocol is bi-direction in nature, thus allowing all subsystems to interact with each other.
@@ -67,10 +67,12 @@ Some features of MQTT that are of interest to us are as follows:
 
 __Our Setup for MQTT:__
 
-![Our MQTT Structure)](https://user-images.githubusercontent.com/86833585/125269582-203cd300-e309-11eb-8c42-9584ea50a97b.jpg)
+![Our MQTT Structure)](/Images/our_setup.jpg)
 
 
-__MQTT Publisher:__![Screenshot from 2021-07-11 11-14-18](https://user-images.githubusercontent.com/86833585/125239659-3fc40380-e2e9-11eb-825f-50aa8128b26f.png)
+__MQTT Publisher:__
+
+![Screenshot from 2021-07-11 11-14-18](/Images/mosq.png)
 
 - We enable the ESP32 board  to act as the MQTT Publisher. 
 - It publishes sensor data every 10 mins to the broker. The ‘PubSubClient’ library is used to establish MQTT connections and publish messages to the MQTT broker.
@@ -81,10 +83,10 @@ __MQTT Publisher:__![Screenshot from 2021-07-11 11-14-18](https://user-images.gi
         /farm/temperature
         
 The figure below shows the 'ESP32' sucessfully publishing data to 'MQTT broker'.   
-![Screenshot from 2021-07-11 11-15-35](https://user-images.githubusercontent.com/86833585/125239455-f673b400-e2e8-11eb-958c-56ee3de46ff9.png)
+![ESP32 successfully publishing data to MQTT broker](/Images/monitor.png)
 
 The figure below shows a failed 'ESP32' connection.
-![Screenshot from 2021-07-11 11-17-34](https://user-images.githubusercontent.com/86833585/125239464-fa9fd180-e2e8-11eb-9bd2-ad4de88fc357.png)
+![ESP32 failed connection to MQTT broker](/Images/monitor_error.png)
 
 __MQTT Broker:__
 - We use the Raspberry pi as the broker. 
@@ -93,10 +95,10 @@ __MQTT Broker:__
 - The default port ‘1883’ is used to listen to all communications.
 
 The figure below shows the 'Broker' reporting publisher connection along with 'publisher' identity.
-![Screenshot from 2021-07-11 11-14-18](https://user-images.githubusercontent.com/86833585/125239672-4783a800-e2e9-11eb-9e9d-458f4d1f14ef.png)
+![Broker reporting publisher connection along with publisher’s identity](/Images/mosq.png)
 
 The figure below shows the 'Broker' reporting failed publisher connection
-![Screenshot from 2021-07-11 11-14-48](https://user-images.githubusercontent.com/86833585/125239685-4d798900-e2e9-11eb-9949-31b3c5e214d4.png)
+![ Broker reporting failed publisher connection](/Images/mosq_error.png)
 
 __MQTT Client:__
 - The Raspberry pi acts as the ‘client’ device as well, and subscribes to the messages of the topic “farm/#”. The wildcard ‘#’ enables the client to listen on any topic that has a main heading of ‘farm’. 
@@ -183,27 +185,27 @@ Given below are the results of the test runs:
 
 -Test Case 1
 
-![test1](https://user-images.githubusercontent.com/86833585/125242893-94697d80-e2ed-11eb-89ce-2e99b81a421d.png)
+![test1](/Images/test1.png)
 
 
 -Test Case 2
 
-![test2](https://user-images.githubusercontent.com/86833585/125242908-98959b00-e2ed-11eb-903b-3a67facf3f2b.png)
+![test2](/Images/test2.png)
 
 
 -Test Case 3
 
-![test3](https://user-images.githubusercontent.com/86833585/125242915-9d5a4f00-e2ed-11eb-848d-58be48091723.png)
+![test3](/Images/test3.png)
 
 
 -Test Case 4
 
-![test4](https://user-images.githubusercontent.com/86833585/125242919-a0553f80-e2ed-11eb-9cfb-fd062e06bc76.png)
+![test4](/Images/test4.png)
 
 
 -Test Case 5
 
-![test5](https://user-images.githubusercontent.com/86833585/125242924-a3503000-e2ed-11eb-8e5a-8b4902bbb36c.png)
+![test5](/Images/test5.png)
 
 
 
