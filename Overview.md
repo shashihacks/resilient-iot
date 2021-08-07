@@ -34,7 +34,7 @@ Task Description:
 
 - The main aim of this task is to gather sensor readings and then transmit them to the raspberry pi, in order to be fed into the control logic. 
 - Two of the three sensors, namely the KY028 temperature sensor and the Capacitive soil moisture sensor are only capable of providing analog inputs while the Mh-Rd raindrop module can provide both a digital and analog input.
-- The raspberry pi is not capable of accepting any analog inputs.
+- The raspberry pi is not capable of accepting any analog inputs, for this reason `ESP32` is used.
 - Analog inputs tend to be more sensitive and accurate as opposed to digital inputs, and thus were of more importance.
 - As such, an ESP32 WiFi enabled dev board was used instead to connect to the sensors and gather data.
 - While the code collects data, it also checks if the sensor values are in the correct range, and verifies that the sensors work. If not, the code sends a predefined input that notifies the control logic of failing sensors or incorrect data.
@@ -49,7 +49,9 @@ The figure below shows the sensor values, their input type and input value range
 |Temperature Sensor|Analog|Value in Celcius|
 
 
-#### Task 2: Using MQTT protocol over WiFi to transport data from ESP32 [publisher] to Raspberry pi [broker + subscriber] (Pranav)
+
+#### Responsible: Pranav
+#### Task 2 : Using MQTT protocol over WiFi to transport data from ESP32 [publisher] to Raspberry pi [broker + subscriber] 
 
 The ESP32 board has WiFi capabilities, and as such, the easiest way to send data over WiFi was via the MQTT protocol
 
@@ -103,17 +105,31 @@ The figure below shows the 'Broker' reporting failed publisher connection
 __MQTT Client:__
 - The Raspberry pi acts as the ‘client’ device as well, and subscribes to the messages of the topic “farm/#”. The wildcard ‘#’ enables the client to listen on any topic that has a main heading of ‘farm’. 
 - The client runs a python script that reads all the messages on our subscribed topic.
-- These values are then saved in a JSON format file, and passed on to the control logic.
+- These values are then saved in a JSON  file, and then  passed on to the control logic.
 
 #### Task 3: Control logic (Shashi)
 
 1. Set up the account with  `openweathermap`  and connect the api.
 2. Get the data from the `openwathermap` api and save. The relevant data(e.g by specifying city, pincode and country) from the api and filter the corresponding keys necessary is procured.
+
+- Retrieveing data
+```python
+api="http://api.openweathermap.org/data/2.5/weather?q=Passau&appid=0b7c4978dda884bbfb0397d03033509f"
+def getCurrentWeatherConditions():
+    response = urllib.request.urlopen(api)
+    output = response.read().decode('utf-8')
+    return  json.loads(output)
+```
+
 3. Create and save objects that combine the sensor data and api data.
 4. validate the input data for identifying the sensor state
     - `9999` indicates that  sensors has failed, as the read value is not in the acceptable range and state of the current sensors is shown to the user as warning.
 
+> sensor data always has value and if any the sensor value is incorrectly obtained or read, then the value of `9999` is assigned.
+
+
 __Senors value and its ranges__
+- Following are the sensors and its value range used in the control logic to determine the irrigation status.
 
 1. Analog rain 
 
@@ -141,7 +157,7 @@ __Senors value and its ranges__
 
 __Determining condition to irrigate__
 
-1. If soil moisture is less than 300 (No moisture) and Ananlog rain sensors value is greater than 3000 (No rain), then irrigates for certain amount of time (5 minutes chosen in our case).
+1. If soil moisture is less than 300 (No moisture) and analog rain sensor's value is greater than 3000 (No rain), then irrigates for certain amount of time (5 minutes chosen in our case).
 2. This is run as scheduled task and checked for every hour
 
 
@@ -157,10 +173,37 @@ __Detecting Liveness of Edge node__
 
 1. Cron job that is set up pings the machine in local network every 30 minutes to indicate that it is alive.
 
+Sample:
+```bash
+$: sudo ping 192.168.1.3 # receiving node ip
+```
+- on receiving node, use `tcpdump` to listen to `ICMP` traffic.
+
+```bash
+$: tcpdump -i eth0 -p ICMP
+```
+
+
 
 __Failure of Internet connectivity__
 1. In case of network  and sensor failure, warning message is show to user.
 
+Ex (Sensor failure):
+```python
+ if(currentSensorvalues['Soil_Moisture'] == 9999):
+        print("WARNING..Soil_Moisture sensor has failed")
+        
+```
+
+__Saving the sensor state__
+
+-If the value read is  `9999` which is the value read when sensor output is not in range, then the corresponding sensor state is saved.
+
+Ex: Soil_Moisture = 9999 (read value)
+then,
+```python
+sensor_state['Soil_Moisture'] = 0
+```
 
 #### Task 4: Checkpointing and recovery
 
@@ -170,7 +213,7 @@ __Failure of Internet connectivity__
 
 
 
-#### Task 5: Test Runs and Cases (Aurika)
+#### Task 5: Test runs and cases (Aurika)
 
 - The code was tested by random input variables to ensure that the logic control was sound and that the system worked as desired.
 - The following input parameters were feeded into the system, shown along with the outcomes.
